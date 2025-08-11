@@ -1,13 +1,31 @@
 @import "tailwindcss";
 
+/* Design tokens */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  /* slate-900 */
 }
 
+/* Tailwind v4 inline theme tokens */
 @theme inline {
+  /* Brand palette */
+  --color-primary: #005a9c;
+  /* Azul institucional */
+  --color-green: #189c5b;
+  /* Verde Vida */
+  --color-orange: #f08a24;
+  /* Naranja Comunidad */
+  --color-red: #d13b3b;
+  /* Rojo Pasión */
+  --color-muted: #f4f4f4;
+  /* Gris suave de secciones */
+  --color-earth: #f5e9dc;
+  /* Beige/Arena cálido */
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -15,12 +33,26 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #e5e7eb;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utilities */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
 }
