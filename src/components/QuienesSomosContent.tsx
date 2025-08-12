@@ -31,15 +31,15 @@ export default function QuienesSomosContent() {
         </motion.div>
 
         <motion.div
-          className="rounded-xl border border-black/5 bg-red-600 p-6 hover:shadow-md cursor-pointer"
+          className="rounded-xl border border-black/5 bg-white p-6 hover:shadow-md cursor-pointer"
           initial={{ x: 24, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           whileHover={{ scale: 1.02 }}
         >
-          <h3 className="text-lg font-semibold text-white">Compromiso</h3>
-          <ul className="mt-3 grid gap-2 text-sm text-white/90 list-disc pl-5">
+          <h3 className="text-lg font-semibold text-gray-900">Compromiso</h3>
+          <ul className="mt-3 grid gap-2 text-sm text-gray-700 list-disc pl-5">
             <li>Vida, educación y participación</li>
             <li>Desarrollo cultural de los pueblos</li>
             <li>Diversidad cultural y ancestral</li>
@@ -55,7 +55,7 @@ export default function QuienesSomosContent() {
           <motion.div
             key={title}
             className={`rounded-xl border border-black/5 p-6 hover:shadow-md cursor-pointer ${
-              title === "Misión" ? "bg-green-600" : "bg-yellow-100"
+              title === "Misión" ? "bg-muted" : "bg-white"
             }`}
             initial={{ y: 24, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -63,8 +63,8 @@ export default function QuienesSomosContent() {
             transition={{ duration: 0.6, ease: "easeOut", delay: idx * 0.1 }}
             whileHover={{ scale: 1.02 }}
           >
-            <h3 className={`text-lg font-semibold ${title === "Misión" ? "text-white" : "text-gray-900"}`}>{title}</h3>
-            <p className={`mt-2 max-w-prose ${title === "Misión" ? "text-white/90" : "text-gray-700"}`}>
+            <h3 className={`text-lg font-semibold text-gray-900`}>{title}</h3>
+            <p className={`mt-2 max-w-prose text-gray-700`}>
               {title === "Misión"
                 ? "Promover el desarrollo integral y sostenible de comunidades en Colombia, fortaleciendo capacidades, liderazgos y alianzas que impulsen la inclusión social, la equidad, la protección ambiental y el acceso justo a los beneficios de la transición energética."
                 : "Ser referente en América Latina por nuestra capacidad de transformar realidades locales, tejiendo vínculos entre comunidades, sector privado y sociedad civil para construir territorios más justos, resilientes y sostenibles."}

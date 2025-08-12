@@ -11,7 +11,7 @@ const navItems = [
   { href: "/impacto", label: "Nuestro Impacto" },
   { href: "/areas", label: "Áreas de Acción" },
   { href: "/transparencia", label: "Transparencia" },
-  { href: "/historias", label: "Historias y Noticias" },
+  // { href: "/historias", label: "Historias y Noticias" }, // temporalmente oculto
   { href: "/contacto", label: "Contacto" },
 ];
 
