@@ -1,6 +1,8 @@
 import Testimonials from "@/components/Testimonials";
 import MediaGallery from "@/components/MediaGallery";
 import { sampleProjects } from "@/data/sampleProjects";
+import Image from "next/image";
+import { realMediaUrls } from "@/data/realMediaUrls";
 
 export const metadata = { title: "Nuestro Impacto | Fundación Energía Social" };
 
@@ -13,9 +15,9 @@ export default function ImpactoPage() {
           <p className="mt-2 text-gray-700 max-w-prose">
             Trabajamos en múltiples territorios del país acompañando procesos sociales, ambientales y productivos con enfoque participativo y humano.
           </p>
-          <div className="mt-6 rounded-xl border border-black/5 bg-white p-6">
-            <div className="aspect-[16/9] w-full rounded bg-earth grid place-content-center text-sm text-gray-600">
-              Mapa interactivo de Colombia (placeholder)
+          <div className="mt-6 rounded-xl border border-black/5 bg-white overflow-hidden">
+            <div className="relative aspect-[16/9] w-full">
+              <Image src={realMediaUrls[12]} alt="Impacto territorial" fill className="object-cover" sizes="100vw" />
             </div>
           </div>
         </div>

@@ -58,6 +58,15 @@ export default function Home() {
               </Link>
             ))}
           </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              1, 2, 3
+            ].map((i) => (
+              <div key={i} className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-black/5">
+                <img src={"https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/Visita%20a%20finca%20cacaotera%20Luker.%20Proyecto%20de%20Desarrollo%20productivo1.%20Caldas.%20Colombia.jpg"} alt="Galería portada" className="h-full w-full object-cover" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
       <Testimonials />

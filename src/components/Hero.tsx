@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import { realMediaUrls } from "@/data/realMediaUrls";
 
 export default function Hero() {
   return (
@@ -50,34 +52,16 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="aspect-[4/3] w-full rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
-            <motion.div
-              className="h-full w-full grid grid-cols-3 gap-2 p-2 bg-muted"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.4 }}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: { staggerChildren: 0.06 },
-                },
-              }}
-            >
-              {["bg-green/70", "bg-orange/70", "bg-red/70", "col-span-3 bg-primary/20", "col-span-2 bg-primary/10", "bg-earth"].map(
-                (cls, i) => (
-                  <motion.div
-                    key={i}
-                    className={`rounded ${cls}`}
-                    initial={{ y: 10, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.05 }}
-                  />
-                )
-              )}
-            </motion.div>
+            <Image
+              src={realMediaUrls[0]}
+              alt="Energía Social en territorio"
+              fill
+              className="object-cover"
+              sizes="(min-width:1024px) 50vw, 100vw"
+              priority
+            />
           </div>
-          <p className="mt-2 text-xs text-foreground/70">Imágenes y video de proyectos podrán ir aquí.</p>
+          <p className="mt-2 text-xs text-foreground/70">Imagen de referencia de nuestros procesos en territorio.</p>
         </motion.div>
       </div>
     </section>
