@@ -3,7 +3,7 @@ export const metadata = { title: "Transición Energética y Equidad Ambiental | 
 export default function TransicionEnergeticaPage() {
   return (
     <div className="container py-12">
-      <h1 className="text-3xl font-semibold">Transición Energética y Equidad Ambiental</h1>
+      <h1 className="text-3xl font-semibold text-gray-400">Transición Energética y Equidad Ambiental</h1>
       <p className="mt-2 text-gray-700 max-w-prose">
         Impulsamos el acceso justo a energías limpias para proteger el planeta y reducir la pobreza energética: proyectos renovables, mitigación del cambio climático, transferencia de conocimiento e innovación, y empoderamiento local en gestión de recursos energéticos.
       </p>

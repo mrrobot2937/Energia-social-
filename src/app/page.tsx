@@ -35,26 +35,26 @@ export default function Home() {
               {
                 title: "Desarrollo Social y Comunitario",
                 href: "/areas/desarrollo-social",
-                color: "bg-green/10",
+                className: "bg-green-600 text-white",
               },
               {
                 title: "Transición Energética y Equidad Ambiental",
                 href: "/areas/transicion-energetica",
-                color: "bg-primary/10",
+                className: "bg-primary text-white",
               },
               {
                 title: "Economía Social e Inclusiva",
                 href: "/areas/economia-social",
-                color: "bg-orange/10",
+                className: "bg-orange-600 text-white",
               },
             ].map((a) => (
               <Link
                 key={a.href}
                 href={a.href}
-                className={`rounded-xl border border-black/5 p-6 hover:shadow-sm transition ${a.color}`}
+                className={`rounded-xl border border-black/5 p-6 transition-transform duration-200 hover:scale-[1.02] hover:shadow-md ${a.className}`}
               >
-                <div className="text-lg font-medium text-gray-900">{a.title}</div>
-                <div className="mt-1 text-sm text-primary">Ver más →</div>
+                <div className="text-lg font-medium">{a.title}</div>
+                <div className="mt-1 text-sm opacity-90">Ver más →</div>
               </Link>
             ))}
           </div>
