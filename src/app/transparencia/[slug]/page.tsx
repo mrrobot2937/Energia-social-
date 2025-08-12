@@ -1,7 +1,5 @@
-"use client";
-
 import type { Metadata } from "next";
-import { useState } from "react";
+import PasswordGate from "@/components/PasswordGate";
 
 export const metadata: Metadata = {
   title: "Documento | Transparencia | Fundación Energía Social",
@@ -39,57 +37,11 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
   const title = titles[slug] || "Documento";
   const url = urls[slug] || "";
 
-  function Gate() {
-    const [input, setInput] = useState("");
-    const [allowed, setAllowed] = useState(false);
-    const [error, setError] = useState("");
-
-    const submit = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (input.trim() === "901861952-9") {
-        setAllowed(true);
-        setError("");
-      } else {
-        setError("Contraseña incorrecta");
-      }
-    };
-
-    if (!allowed) {
-      return (
-        <form onSubmit={submit} className="mt-4 max-w-md rounded-xl border border-black/10 bg-white p-4 grid gap-3">
-          <label className="text-sm font-medium text-gray-900">Ingrese la contraseña para ver el documento</label>
-          <input
-            className="border border-black/20 rounded px-3 py-2 text-gray-900"
-            placeholder="Contraseña"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            type="password"
-            required
-          />
-          {error && <div className="text-sm text-red-600">{error}</div>}
-          <button type="submit" className="inline-flex items-center justify-center rounded bg-primary text-white px-4 py-2 text-sm font-medium">
-            Ver documento
-          </button>
-        </form>
-      );
-    }
-
-    return url ? (
-      <div className="mt-4 rounded-xl border border-black/5 overflow-hidden">
-        <iframe src={url} className="w-full" style={{ height: 800 }} title={title} />
-      </div>
-    ) : (
-      <div className="mt-4 rounded-xl border border-dashed border-black/10 bg-muted p-6 text-sm text-gray-700">
-        Aún no se ha cargado la URL del documento.
-      </div>
-    );
-  }
-
   return (
     <div className="container py-12">
       <h1 className="text-2xl font-semibold text-gray-400">{title}</h1>
       <p className="mt-1 text-sm text-gray-600">Formato PDF</p>
-      <Gate />
+      <PasswordGate url={url} title={title} />
     </div>
   );
 }
