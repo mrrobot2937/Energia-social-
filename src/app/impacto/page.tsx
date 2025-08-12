@@ -58,9 +58,7 @@ export default function ImpactoPage() {
           ].map((p) => (
             <div key={p.title} className="rounded-xl border border-black/5 bg-white p-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
               <div className={`h-2 w-full ${p.color}`} />
-              <div className="relative w-full">
-                <Image src={p.image} alt={p.title} width={1200} height={800} className="w-full h-auto object-contain bg-muted" />
-              </div>
+              <img src={p.image} alt={p.title} className="w-full h-auto object-contain bg-muted" />
               <div className="p-6">
                 <div className="font-medium text-gray-900">{p.title}</div>
                 <div className="text-sm text-gray-700">{p.location} · {p.tag}</div>
@@ -75,7 +73,7 @@ export default function ImpactoPage() {
         <h2 className="text-2xl font-semibold">Galería</h2>
         {/* <p className="text-sm text-gray-700 mt-1">Imágenes y videos organizados por proyectos (datos de ejemplo).</p> */}
         <div className="mt-6">
-          <MediaGallery projects={sampleProjects} imageBaseSize={220} />
+          <MediaGallery projects={sampleProjects} />
         </div>
       </section>
 
