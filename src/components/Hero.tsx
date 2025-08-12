@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { realMediaUrls } from "@/data/realMediaUrls";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export default function Hero() {
   return (
@@ -51,17 +50,15 @@ export default function Hero() {
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <div className="aspect-[4/3] w-full rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
-            <Image
-              src={realMediaUrls[0]}
-              alt="Energía Social en territorio"
-              fill
-              className="object-cover"
-              sizes="(min-width:1024px) 50vw, 100vw"
-              priority
-            />
-          </div>
-          <p className="mt-2 text-xs text-foreground/70">Imagen de referencia de nuestros procesos en territorio.</p>
+          <HeroCarousel
+            images={[
+              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg" },
+              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg" },
+              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/45-1024x768.jpeg" },
+              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/F6-1024x577.jpeg" },
+            ]}
+          />
+          <p className="mt-2 text-xs text-foreground/70">Imágenes recientes de procesos y territorios.</p>
         </motion.div>
       </div>
     </section>

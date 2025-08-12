@@ -27,16 +27,42 @@ export default function ImpactoPage() {
         <h2 className="text-2xl font-semibold">Proyectos Destacados</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {[
-            { title: "Equidad de género con mujeres Wayuú", location: "La Guajira", tag: "Desarrollo Social", color: "bg-orange-600" },
-            { title: "Gestión del riesgo comunitario", location: "Caquetá", tag: "Resiliencia", color: "bg-green-600" },
-            { title: "Café con identidad: Togoima", location: "Cauca, Valle, Nariño", tag: "Economía Social", color: "bg-red-600" },
-            { title: "Energía renovable comunitaria", location: "Colombia", tag: "Transición Energética", color: "bg-primary" },
+            {
+              title: "Equidad de género con mujeres Wayuú",
+              location: "La Guajira",
+              tag: "Desarrollo Social",
+              color: "bg-orange-600",
+              image: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg",
+            },
+            {
+              title: "Gestión del riesgo comunitario",
+              location: "Caquetá",
+              tag: "Resiliencia",
+              color: "bg-green-600",
+              image: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg",
+            },
+            {
+              title: "Café con identidad: Togoima",
+              location: "Cauca, Valle, Nariño",
+              tag: "Economía Social",
+              color: "bg-red-600",
+              image: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/FOTOS-WEB-1-1024x768.jpeg",
+            },
+            {
+              title: "Energía renovable comunitaria",
+              location: "Colombia",
+              tag: "Transición Energética",
+              color: "bg-primary",
+              image: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/45-1024x768.jpeg",
+            },
           ].map((p) => (
             <div key={p.title} className="rounded-xl border border-black/5 bg-white p-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
               <div className={`h-2 w-full ${p.color}`} />
+              <div className="relative aspect-[4/3] w-full">
+                <Image src={p.image} alt={p.title} fill className="object-cover" sizes="(min-width:1024px) 33vw, 100vw" />
+              </div>
               <div className="p-6">
-                <div className="h-32 rounded bg-muted" />
-                <div className="mt-3 font-medium text-gray-900">{p.title}</div>
+                <div className="font-medium text-gray-900">{p.title}</div>
                 <div className="text-sm text-gray-700">{p.location} · {p.tag}</div>
                 <button className="mt-3 text-sm text-primary">Ver detalles →</button>
               </div>
