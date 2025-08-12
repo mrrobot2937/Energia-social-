@@ -48,11 +48,11 @@ export default function QuienesSomosContent() {
             />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Compromiso</h3>
-            <p className="mt-2 text-sm text-gray-700">
+            <h3 className="text-lg font-semibold text-gray-200">Compromiso</h3>
+            <p className="mt-2 text-sm text-gray-400">
               Vida, educación y participación; diversidad cultural; preservación de la naturaleza; conocimiento de los territorios y trabajo social con ética.
             </p>
-            <button className="mt-2 text-sm text-primary">Conoce más →</button>
+    
           </div>
         </motion.div>
       </section>
@@ -81,13 +81,13 @@ export default function QuienesSomosContent() {
               />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-              <p className="mt-2 max-w-prose text-gray-700">
+              <h3 className="text-lg font-semibold text-blue-200">{title}</h3>
+              <p className="mt-2 max-w-prose text-gray-400">
                 {title === "Misión"
                   ? "Promover el desarrollo integral y sostenible de comunidades en Colombia, fortaleciendo capacidades, liderazgos y alianzas que impulsen la inclusión social, la equidad, la protección ambiental y el acceso justo a los beneficios de la transición energética."
                   : "Ser referente en América Latina por nuestra capacidad de transformar realidades locales, tejiendo vínculos entre comunidades, sector privado y sociedad civil para construir territorios más justos, resilientes y sostenibles."}
               </p>
-              <button className="mt-2 text-sm text-primary">Explorar →</button>
+              {/* <button className="mt-2 text-sm text-primary">Explorar →</button> */}
             </div>
           </motion.div>
         ))}

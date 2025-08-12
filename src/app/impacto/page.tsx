@@ -73,7 +73,7 @@ export default function ImpactoPage() {
 
       <section className="container py-12">
         <h2 className="text-2xl font-semibold">Galería</h2>
-        <p className="text-sm text-gray-700 mt-1">Imágenes y videos organizados por proyectos (datos de ejemplo).</p>
+        {/* <p className="text-sm text-gray-700 mt-1">Imágenes y videos organizados por proyectos (datos de ejemplo).</p> */}
         <div className="mt-6">
           <MediaGallery projects={sampleProjects} imageBaseSize={220} />
         </div>

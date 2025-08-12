@@ -19,7 +19,7 @@ export default function QuienesSomosPage() {
       </div>
       <QuienesSomosContent />
       <div className="container mt-10">
-        <h2 className="text-xl font-semibold">Nuestro Equipo (fotos)</h2>
+        <h2 className="text-xl font-semibold">Nuestro Equipo </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
             { name: "Nelsy Cabrera Valencia", url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/nelsy.jpeg" },

@@ -44,16 +44,36 @@ export default function NavBar() {
             Únete
           </Link>
         </nav>
-        <div className="md:hidden">
-          {/* Simple mobile menu as a placeholder */}
-          <Link
-            href="/unete"
-            className="inline-flex items-center rounded-full bg-primary text-white text-sm font-medium px-3 py-1.5"
-          >
-            Únete
-          </Link>
-        </div>
+        <MobileMenu pathname={pathname} />
       </div>
     </header>
+  );
+}
+
+function MobileMenu({ pathname }: { pathname: string }) {
+  return (
+    <details className="md:hidden relative">
+      <summary className="list-none select-none cursor-pointer inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm">
+        Menú
+        <span className="ml-1">▾</span>
+      </summary>
+      <div className="absolute right-0 mt-2 w-52 rounded-xl border border-black/10 bg-white shadow-lg p-2">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`block rounded px-3 py-2 text-sm hover:bg-muted ${
+              pathname === item.href ? "text-primary" : "text-gray-700"
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+        <div className="border-t border-black/10 my-1" />
+        <Link href="/unete" className="block rounded bg-primary text-white text-sm px-3 py-2 text-center">
+          Únete
+        </Link>
+      </div>
+    </details>
   );
 }
