@@ -53,7 +53,7 @@ export default function NavBar() {
 function MobileMenu({ pathname }: { pathname: string }) {
   return (
     <details className="md:hidden relative">
-      <summary className="list-none select-none cursor-pointer inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm">
+      <summary className="list-none select-none cursor-pointer inline-flex items-center rounded-full border border-primary bg-primary px-3 py-1.5 text-sm text-white">
         Menú
         <span className="ml-1">▾</span>
       </summary>

@@ -58,8 +58,8 @@ export default function ImpactoPage() {
           ].map((p) => (
             <div key={p.title} className="rounded-xl border border-black/5 bg-white p-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
               <div className={`h-2 w-full ${p.color}`} />
-              <div className="relative aspect-[4/3] w-full">
-                <Image src={p.image} alt={p.title} fill className="object-cover" sizes="(min-width:1024px) 33vw, 100vw" />
+              <div className="relative w-full">
+                <Image src={p.image} alt={p.title} width={1200} height={800} className="w-full h-auto object-contain bg-muted" />
               </div>
               <div className="p-6">
                 <div className="font-medium text-gray-900">{p.title}</div>
