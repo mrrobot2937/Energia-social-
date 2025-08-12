@@ -3,14 +3,19 @@ export const metadata = { title: "Quiénes Somos | Fundación Energía Social" }
 import QuienesSomosContent from "@/components/QuienesSomosContent";
 import Image from "next/image";
 import { realMediaUrls } from "@/data/realMediaUrls";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export default function QuienesSomosPage() {
   return (
     <>
       <div className="container mt-8">
-        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-xl border border-black/5">
-          <Image src={realMediaUrls[5]} alt="Quiénes somos" fill className="object-cover" sizes="100vw" />
-        </div>
+        <HeroCarousel
+          images={[
+            { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg", alt: "Trabajo en territorio" },
+            { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg", alt: "Diálogo comunitario" },
+            { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/F6-1024x577.jpeg", alt: "Acompañamiento técnico" },
+          ]}
+        />
       </div>
       <QuienesSomosContent />
       <div className="container mt-10">
