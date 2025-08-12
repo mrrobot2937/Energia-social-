@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function QuienesSomosContent() {
   return (
@@ -37,7 +38,15 @@ export default function QuienesSomosContent() {
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         >
-          <div className="h-[90px] w-full overflow-hidden rounded-md bg-muted" />
+          <div className="relative h-[90px] w-full overflow-hidden rounded-md">
+            <Image
+              src="https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg"
+              alt="Compromiso en territorio"
+              fill
+              className="object-cover"
+              sizes="200px"
+            />
+          </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Compromiso</h3>
             <p className="mt-2 text-sm text-gray-700">
@@ -58,7 +67,19 @@ export default function QuienesSomosContent() {
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: idx * 0.1 }}
           >
-            <div className="h-[90px] w-full overflow-hidden rounded-md bg-muted" />
+            <div className="relative h-[90px] w-full overflow-hidden rounded-md">
+              <Image
+                src={
+                  title === "Misión"
+                    ? "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg"
+                    : "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/F6-1024x577.jpeg"
+                }
+                alt={title}
+                fill
+                className="object-cover"
+                sizes="200px"
+              />
+            </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
               <p className="mt-2 max-w-prose text-gray-700">
@@ -70,31 +91,6 @@ export default function QuienesSomosContent() {
             </div>
           </motion.div>
         ))}
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-xl font-semibold">Nuestro Equipo</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {[
-            { name: "Nelsy Cabrera Valencia", role: "Gerente General" },
-            { name: "Alexander Bances Gómez", role: "Director de Proyectos y Gestión financiera" },
-            { name: "Guillermo Valderrama Ochoa", role: "Coordinador Derechos Humanos y cultura de Paz · Director de Recursos Humanos" },
-          ].map((p, idx) => (
-            <motion.div
-              key={p.name}
-              className="rounded-xl border border-black/5 p-4 bg-white hover:shadow-md cursor-pointer"
-              initial={{ scale: 0.98, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.05 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="h-32 rounded bg-muted" />
-              <div className="mt-3 font-medium text-gray-900">{p.name}</div>
-              <div className="text-sm text-gray-600">{p.role}</div>
-            </motion.div>
-          ))}
-        </div>
       </section>
     </div>
   );
