@@ -2,7 +2,6 @@ export const metadata = { title: "Quiénes Somos | Fundación Energía Social" }
 
 import QuienesSomosContent from "@/components/QuienesSomosContent";
 import Image from "next/image";
-import { realMediaUrls } from "@/data/realMediaUrls";
 import HeroCarousel from "@/components/HeroCarousel";
 
 export default function QuienesSomosPage() {

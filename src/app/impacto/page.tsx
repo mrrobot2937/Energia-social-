@@ -3,6 +3,7 @@ import MediaGallery from "@/components/MediaGallery";
 import { sampleProjects } from "@/data/sampleProjects";
 import Image from "next/image";
 import { realMediaUrls } from "@/data/realMediaUrls";
+import ColombiaMapWrapper from "@/components/ColombiaMapWrapper";
 
 export const metadata = { title: "Nuestro Impacto | Fundación Energía Social" };
 
@@ -20,6 +21,16 @@ export default function ImpactoPage() {
               <Image src={realMediaUrls[12]} alt="Impacto territorial" fill className="object-cover" sizes="100vw" />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-12">
+        <div className="container">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Presencia Nacional</h2>
+          <p className="text-gray-700 mb-6">
+            Nuestra fundación ha llegado a 19 ciudades principales de Colombia, llevando soluciones energéticas sostenibles y desarrollo social a comunidades en todo el territorio nacional.
+          </p>
+          <ColombiaMapWrapper />
         </div>
       </section>
 
@@ -58,7 +69,9 @@ export default function ImpactoPage() {
           ].map((p) => (
             <div key={p.title} className="rounded-xl border border-black/5 bg-white p-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
               <div className={`h-2 w-full ${p.color}`} />
-              <img src={p.image} alt={p.title} className="w-full h-auto object-contain bg-muted" />
+              <div className="relative w-full aspect-[4/3] bg-muted">
+                <Image src={p.image} alt={p.title} fill className="object-contain" sizes="(max-width: 768px) 100vw, 33vw" />
+              </div>
               <div className="p-6">
                 <div className="font-medium text-gray-900">{p.title}</div>
                 <div className="text-sm text-gray-700">{p.location} · {p.tag}</div>

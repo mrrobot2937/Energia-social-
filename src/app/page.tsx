@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import ImpactStats from "@/components/ImpactStats";
 import Testimonials from "@/components/Testimonials";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -65,7 +66,7 @@ export default function Home() {
               "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/oromiel-apoyo2.jpeg",
             ].map((url, i) => (
               <div key={i} className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-black/5">
-                <img src={url} alt="Oromiel - proyectos recientes" className="h-full w-full object-cover" />
+                <Image src={url} alt="Oromiel - proyectos recientes" fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
               </div>
             ))}
           </div>

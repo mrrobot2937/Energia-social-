@@ -11,7 +11,7 @@ export default function Footer() {
           </p>
         </div>
         <div>
-          <h5 className="text-sm font-semibold mb-2">Contacto</h5>
+          <h5 className="text-sm font-semibold mb-2 text-primary">Contacto</h5>
           <ul className="space-y-1 text-sm text-gray-700">
             <li>Email: <Link href="mailto:gerencia@energiasocial.com.co" className="text-primary hover:underline">gerencia@energiasocial.com.co</Link></li>
             <li>Tel: +57 3107997715 / +57 3155520833</li>

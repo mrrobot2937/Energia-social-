@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Image from "next/image";
 
 export type MediaItem = {
   type: "image" | "video";
@@ -39,12 +40,15 @@ export default function MediaGallery({ projects }: { projects: Project[] }) {
             className={`group rounded-xl border border-black/5 bg-white ${colSpan} ${lgColSpan}`}
           >
             {m.type === "image" ? (
-              <img
-                src={m.url}
-                alt={m.alt || m.projectTitle}
-                className="w-full h-auto object-contain bg-muted"
-                loading="lazy"
-              />
+              <div className="relative w-full aspect-[4/3] bg-muted">
+                <Image
+                  src={m.url}
+                  alt={m.alt || m.projectTitle}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
             ) : (
               <video className="w-full h-auto bg-black" src={m.url} controls playsInline />
             )}
