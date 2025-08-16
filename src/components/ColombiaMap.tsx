@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import type { Place } from '@/data/places';
+import { places } from '@/data/places';
 
 // Solucionar el problema de los iconos de Leaflet en Next.js
 const iconDefault = L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: string };
@@ -23,33 +26,104 @@ const redIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-// Coordenadas de las ciudades
-const cities = [
-  { name: 'Bogotá', lat: 4.7110, lng: -74.0721 },
-  { name: 'Medellín', lat: 6.2476, lng: -75.5658 },
-  { name: 'Cali', lat: 3.4516, lng: -76.5320 },
-  { name: 'Cartagena', lat: 10.3910, lng: -75.4794 },
-  { name: 'Barranquilla', lat: 10.9685, lng: -74.7813 },
-  { name: 'Bucaramanga', lat: 7.1193, lng: -73.1227 },
-  { name: 'Riohacha', lat: 11.5444, lng: -72.9072 },
-  { name: 'Valledupar', lat: 10.4631, lng: -73.2532 },
-  { name: 'Montería', lat: 8.7575, lng: -75.8900 },
-  { name: 'Quibdó', lat: 5.6919, lng: -76.6583 },
-  { name: 'Manizales', lat: 5.0703, lng: -75.5138 },
-  { name: 'Popayán', lat: 2.4448, lng: -76.6147 },
-  { name: 'Pasto', lat: 1.2136, lng: -77.2811 },
-  { name: 'Florencia', lat: 1.6144, lng: -75.6062 },
-  { name: 'Leticia', lat: -4.2153, lng: -69.9408 },
-  { name: 'Mitú', lat: 1.2578, lng: -70.2334 },
-  { name: 'Villavicencio', lat: 4.1420, lng: -73.6266 },
-  { name: 'Santa Marta', lat: 11.2408, lng: -74.1990 },
-  { name: 'San José del Guaviare', lat: 2.5701, lng: -72.6416 }
-];
+type ResolvedPlace = { label: string; lat: number; lng: number };
+
+function getCacheKey(query: string): string {
+  return `geocode:${query}`;
+}
+
+async function geocode(query: string): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&addressdetails=0&namedetails=0`;
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) return null;
+    const data: Array<{ lat: string; lon: string } > = await res.json();
+    if (!data || data.length === 0) return null;
+    const first = data[0];
+    const lat = parseFloat(first.lat);
+    const lng = parseFloat(first.lon);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 export default function ColombiaMap() {
-  // Centro de Colombia y zoom inicial
+  // Centro aproximado de Latinoamérica y zoom inicial amplio
   const center: [number, number] = [4.5709, -74.2973];
-  const zoom = 6;
+  const zoom = 4;
+
+  const mapRef = useRef<L.Map | null>(null);
+  const [markers, setMarkers] = useState<ResolvedPlace[]>([]);
+
+  // Para evitar duplicados por etiquetas similares
+  const uniquePlaces: Place[] = useMemo(() => {
+    const seen = new Set<string>();
+    const list: Place[] = [];
+    for (const p of places) {
+      const key = p.label.trim().toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      list.push(p);
+    }
+    return list;
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveAll() {
+      const resolved: ResolvedPlace[] = [];
+
+      for (let i = 0; i < uniquePlaces.length; i++) {
+        const place = uniquePlaces[i];
+        const cacheKey = getCacheKey(place.query);
+        let coords: { lat: number; lng: number } | null = null;
+
+        try {
+          const cached = typeof window !== 'undefined' ? localStorage.getItem(cacheKey) : null;
+          if (cached) {
+            coords = JSON.parse(cached);
+          }
+        } catch {}
+
+        if (!coords) {
+          // espaciar peticiones para ser amables con el servicio
+          // eslint-disable-next-line no-await-in-loop
+          coords = await geocode(place.query);
+          if (coords) {
+            try {
+              localStorage.setItem(cacheKey, JSON.stringify(coords));
+            } catch {}
+          }
+          // pequeña espera entre requests
+          // eslint-disable-next-line no-await-in-loop
+          await new Promise((r) => setTimeout(r, 150));
+        }
+
+        if (coords && !cancelled) {
+          resolved.push({ label: place.label, ...coords });
+          // actualizar incrementalmente para mostrar puntos a medida que cargan
+          setMarkers((prev) => {
+            const next = [...prev, { label: place.label, ...coords }];
+            // ajustar bounds cuando hay suficientes puntos
+            if (mapRef.current && next.length >= 2) {
+              const bounds = L.latLngBounds(next.map((m) => [m.lat, m.lng] as [number, number]));
+              mapRef.current.fitBounds(bounds, { padding: [24, 24] });
+            }
+            return next;
+          });
+        }
+      }
+      return resolved;
+    }
+
+    resolveAll();
+    return () => {
+      cancelled = true;
+    };
+  }, [uniquePlaces]);
 
   return (
     <div className="w-full h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
@@ -58,20 +132,21 @@ export default function ColombiaMap() {
         zoom={zoom} 
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={true}
+        whenCreated={(map) => { mapRef.current = map; }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {cities.map((city) => (
+        {markers.map((city) => (
           <Marker 
-            key={city.name} 
-            position={[city.lat, city.lng]} 
+            key={`${city.label}-${city.lat}-${city.lng}`} 
+            position={[city.lat, city.lng]}
             icon={redIcon}
           >
             <Popup>
               <div className="text-center">
-                <h3 className="font-semibold text-gray-900">{city.name}</h3>
+                <h3 className="font-semibold text-gray-900">{city.label}</h3>
                 <p className="text-sm text-gray-600">Zona de impacto</p>
               </div>
             </Popup>
