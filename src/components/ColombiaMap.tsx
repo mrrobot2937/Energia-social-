@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import L from 'leaflet';
+import L, { Map as LeafletMap } from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Place } from '@/data/places';
@@ -54,7 +54,7 @@ export default function ColombiaMap() {
   const center: [number, number] = [4.5709, -74.2973];
   const zoom = 4;
 
-  const mapRef = useRef<L.Map | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
   const [markers, setMarkers] = useState<ResolvedPlace[]>([]);
 
   // Para evitar duplicados por etiquetas similares
@@ -90,7 +90,6 @@ export default function ColombiaMap() {
 
         if (!coords) {
           // espaciar peticiones para ser amables con el servicio
-          // eslint-disable-next-line no-await-in-loop
           coords = await geocode(place.query);
           if (coords) {
             try {
@@ -98,7 +97,6 @@ export default function ColombiaMap() {
             } catch {}
           }
           // pequeña espera entre requests
-          // eslint-disable-next-line no-await-in-loop
           await new Promise((r) => setTimeout(r, 150));
         }
 
@@ -132,7 +130,7 @@ export default function ColombiaMap() {
         zoom={zoom} 
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={true}
-        whenCreated={(map) => { mapRef.current = map; }}
+        ref={mapRef}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
