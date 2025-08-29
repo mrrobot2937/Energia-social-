@@ -4,8 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import L, { Map as LeafletMap } from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { Place } from '@/data/places';
-import { places } from '@/data/places';
+import { countries, getMajorCities, getDepartmentsByCountry, getCitiesByDepartment, type City, type Country, type Department } from '@/data/placesOrganized';
 
 // Solucionar el problema de los iconos de Leaflet en Next.js
 const iconDefault = L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: string };
@@ -16,7 +15,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Crear icono personalizado rojo
+// Crear iconos personalizados
 const redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -26,7 +25,23 @@ const redIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-type ResolvedPlace = { label: string; lat: number; lng: number };
+const blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [20, 33],
+  iconAnchor: [10, 33],
+  popupAnchor: [1, -28],
+  shadowSize: [33, 33]
+});
+
+type ResolvedPlace = { 
+  label: string; 
+  lat: number; 
+  lng: number; 
+  isMajor?: boolean;
+  country?: string;
+  department?: string;
+};
 
 function getCacheKey(query: string): string {
   return `geocode:${query}`;
@@ -56,29 +71,48 @@ export default function ColombiaMap() {
 
   const mapRef = useRef<LeafletMap | null>(null);
   const [markers, setMarkers] = useState<ResolvedPlace[]>([]);
+  const [expandedCountries, setExpandedCountries] = useState<Set<string>>(new Set());
+  const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(new Set());
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Para evitar duplicados por etiquetas similares
-  const uniquePlaces: Place[] = useMemo(() => {
-    const seen = new Set<string>();
-    const list: Place[] = [];
-    for (const p of places) {
-      const key = p.label.trim().toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      list.push(p);
-    }
-    return list;
-  }, []);
+  // Obtener solo ciudades principales inicialmente
+  const citiesToShow = useMemo(() => {
+    const cities: City[] = [];
+    
+    // Primero agregamos las ciudades principales
+    cities.push(...getMajorCities());
+    
+    // Luego agregamos las ciudades de los departamentos expandidos
+    countries.forEach(country => {
+      if (expandedCountries.has(country.name)) {
+        country.departments.forEach(dept => {
+          const deptKey = `${country.name}-${dept.name}`;
+          if (expandedDepartments.has(deptKey)) {
+            // Agregar todas las ciudades del departamento que no sean principales
+            dept.cities.forEach(city => {
+              if (!city.isMajorCity) {
+                cities.push(city);
+              }
+            });
+          }
+        });
+      }
+    });
+    
+    return cities;
+  }, [expandedCountries, expandedDepartments]);
 
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
 
     async function resolveAll() {
       const resolved: ResolvedPlace[] = [];
 
-      for (let i = 0; i < uniquePlaces.length; i++) {
-        const place = uniquePlaces[i];
-        const cacheKey = getCacheKey(place.query);
+      for (let i = 0; i < citiesToShow.length; i++) {
+        const city = citiesToShow[i];
+        const cacheKey = getCacheKey(city.query);
         let coords: { lat: number; lng: number } | null = null;
 
         try {
@@ -89,8 +123,7 @@ export default function ColombiaMap() {
         } catch {}
 
         if (!coords) {
-          // espaciar peticiones para ser amables con el servicio
-          coords = await geocode(place.query);
+          coords = await geocode(city.query);
           if (coords) {
             try {
               localStorage.setItem(cacheKey, JSON.stringify(coords));
@@ -101,19 +134,24 @@ export default function ColombiaMap() {
         }
 
         if (coords && !cancelled) {
-          resolved.push({ label: place.label, ...coords });
-          // actualizar incrementalmente para mostrar puntos a medida que cargan
+          resolved.push({ 
+            label: city.name, 
+            ...coords,
+            isMajor: city.isMajorCity
+          });
+          
           setMarkers((prev) => {
-            const next = [...prev, { label: place.label, ...coords }];
-            // ajustar bounds cuando hay suficientes puntos
-            if (mapRef.current && next.length >= 2) {
-              const bounds = L.latLngBounds(next.map((m) => [m.lat, m.lng] as [number, number]));
-              mapRef.current.fitBounds(bounds, { padding: [24, 24] });
-            }
+            const next = [...prev.filter(m => m.label !== city.name), { 
+              label: city.name, 
+              ...coords,
+              isMajor: city.isMajorCity
+            }];
             return next;
           });
         }
       }
+      
+      setLoading(false);
       return resolved;
     }
 
@@ -121,36 +159,132 @@ export default function ColombiaMap() {
     return () => {
       cancelled = true;
     };
-  }, [uniquePlaces]);
+  }, [citiesToShow]);
+
+  const toggleCountry = (countryName: string) => {
+    setExpandedCountries(prev => {
+      const next = new Set(prev);
+      if (next.has(countryName)) {
+        next.delete(countryName);
+        // También colapsar todos los departamentos de este país
+        countries.find(c => c.name === countryName)?.departments.forEach(dept => {
+          setExpandedDepartments(prev2 => {
+            const next2 = new Set(prev2);
+            next2.delete(`${countryName}-${dept.name}`);
+            return next2;
+          });
+        });
+      } else {
+        next.add(countryName);
+      }
+      return next;
+    });
+    setSelectedCountry(countryName);
+  };
+
+  const toggleDepartment = (countryName: string, deptName: string) => {
+    const key = `${countryName}-${deptName}`;
+    setExpandedDepartments(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
 
   return (
-    <div className="w-full h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
-      <MapContainer 
-        center={center} 
-        zoom={zoom} 
-        style={{ height: '100%', width: '100%' }}
-        scrollWheelZoom={true}
-        ref={mapRef}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {markers.map((city) => (
-          <Marker 
-            key={`${city.label}-${city.lat}-${city.lng}`} 
-            position={[city.lat, city.lng]}
-            icon={redIcon}
-          >
-            <Popup>
-              <div className="text-center">
-                <h3 className="font-semibold text-gray-900">{city.label}</h3>
-                <p className="text-sm text-gray-600">Zona de impacto</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+    <div className="w-full">
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold mb-2">Presencia en Latinoamérica</h3>
+        <p className="text-sm text-gray-600 mb-3">
+          El mapa muestra las ciudades principales. Haz clic en un país para ver sus departamentos y municipios.
+        </p>
+        
+        {/* Lista de países */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          {countries.map(country => (
+            <button
+              key={country.name}
+              onClick={() => toggleCountry(country.name)}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                expandedCountries.has(country.name) 
+                  ? 'bg-primary text-white' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+            >
+              {country.name} {expandedCountries.has(country.name) ? '−' : '+'}
+            </button>
+          ))}
+        </div>
+        
+        {/* Lista de departamentos del país seleccionado */}
+        {selectedCountry && expandedCountries.has(selectedCountry) && (
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <h4 className="font-medium mb-2">{selectedCountry} - Departamentos:</h4>
+            <div className="flex flex-wrap gap-2">
+              {getDepartmentsByCountry(selectedCountry).map(dept => {
+                const key = `${selectedCountry}-${dept.name}`;
+                const cityCount = dept.cities.filter(c => !c.isMajorCity).length;
+                if (cityCount === 0) return null;
+                
+                return (
+                  <button
+                    key={dept.name}
+                    onClick={() => toggleDepartment(selectedCountry, dept.name)}
+                    className={`px-2 py-1 rounded text-xs transition-colors ${
+                      expandedDepartments.has(key)
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-300'
+                    }`}
+                  >
+                    {dept.name} ({cityCount}) {expandedDepartments.has(key) ? '−' : '+'}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        
+        {loading && (
+          <div className="text-sm text-gray-500 mt-2">
+            Cargando ubicaciones...
+          </div>
+        )}
+      </div>
+      
+      <div className="h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+        <MapContainer 
+          center={center} 
+          zoom={zoom} 
+          style={{ height: '100%', width: '100%' }}
+          scrollWheelZoom={true}
+          ref={mapRef}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {markers.map((city) => (
+            <Marker 
+              key={`${city.label}-${city.lat}-${city.lng}`} 
+              position={[city.lat, city.lng]}
+              icon={city.isMajor ? redIcon : blueIcon}
+            >
+              <Popup>
+                <div className="text-center">
+                  <h3 className="font-semibold text-gray-900">{city.label}</h3>
+                  <p className="text-sm text-gray-600">
+                    {city.isMajor ? 'Ciudad principal' : 'Municipio con proyectos'}
+                  </p>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
     </div>
   );
 }

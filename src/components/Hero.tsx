@@ -14,20 +14,20 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <motion.h1
-            className="text-3xl md:text-5xl font-semibold leading-tight"
+            className="text-3xl md:text-5xl font-bold leading-tight text-gray-900"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
           >
-            Energía Social: Transformando comunidades, construyendo futuro
+            Transformamos territorios con energía humana
           </motion.h1>
           <motion.p
-            className="mt-4 text-lg text-foreground max-w-prose"
+            className="mt-4 text-lg md:text-xl text-gray-700 max-w-prose leading-relaxed"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            Nuestra misión: «Transformar con energía humana». Promovemos la vida, la dignidad y el protagonismo de las comunidades a través de la educación, la participación, el fortalecimiento cultural y la defensa activa de la naturaleza.
+            Somos una fundación que acompaña a comunidades indígenas, campesinas, negras y urbanas en Colombia y Latinoamérica, construyendo desarrollo sostenible a través de la equidad social, la transición energética justa y el fortalecimiento de economías locales.
           </motion.p>
           <motion.div
             className="mt-6 flex flex-wrap gap-3"
@@ -52,10 +52,26 @@ export default function Hero() {
         >
           <HeroCarousel
             images={[
-              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg" },
-              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg" },
-              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/45-1024x768.jpeg" },
-              { url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/F6-1024x577.jpeg" },
+              { 
+                url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/45-1024x768.jpeg",
+                alt: "Comunidad indígena reunida en asamblea - Fortalecimiento del tejido social"
+              },
+              { 
+                url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/F6-1024x577.jpeg",
+                alt: "Proyecto de energía solar comunitaria - Transición energética justa"
+              },
+              { 
+                url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/oro-miel-apoyo3.jpeg",
+                alt: "Apicultura sostenible Oromiel - Economía social e inclusiva"
+              },
+              { 
+                url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/21-1024x473.jpeg",
+                alt: "Trabajo comunitario en territorio - Construcción colectiva"
+              },
+              {
+                url: "https://terrazaedenfiles.s3.us-east-2.amazonaws.com/energiasoial/principales/20191201_103709-1024x498.jpg",
+                alt: "Educación y capacitación comunitaria - Transformación social"
+              }
             ]}
           />
           <p className="mt-2 text-xs text-foreground/70">Imágenes recientes de procesos y territorios.</p>

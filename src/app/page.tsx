@@ -8,21 +8,48 @@ export default function Home() {
   return (
     <div className="font-sans">
       <Hero />
-      <section className="py-12">
-        <div className="container grid gap-6 md:grid-cols-2 items-start">
+      <section className="py-16 bg-gray-50">
+        <div className="container grid gap-8 md:grid-cols-2 items-start">
           <div>
-            <h2 className="text-2xl md:text-3xl font-semibold">Nuestra inspiración</h2>
-            <p className="mt-3 text-gray-300 max-w-prose">
-              Nos inspira la riqueza ancestral, la sabiduría de los pueblos y el poder transformador de la acción colectiva. Caminamos junto a comunidades campesinas, indígenas, negras y urbanas en la construcción de territorios sostenibles, donde el desarrollo sea sinónimo de equidad, inclusión y respeto por la vida.
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Por qué existimos</h2>
+            <p className="mt-4 text-gray-700 max-w-prose leading-relaxed">
+              Creemos en el poder transformador de las comunidades cuando son protagonistas de su propio desarrollo. Durante más de dos décadas, hemos acompañado procesos de cambio social en territorios vulnerables, demostrando que es posible construir alternativas de vida digna respetando la identidad cultural y el equilibrio con la naturaleza.
+            </p>
+            <p className="mt-4 text-gray-700 max-w-prose leading-relaxed">
+              Nuestra experiencia nos ha enseñado que la verdadera transformación surge cuando se combinan el conocimiento ancestral con innovación apropiada, la organización comunitaria con gestión eficiente, y la conservación ambiental con desarrollo económico inclusivo.
             </p>
           </div>
-          <div className="rounded-xl bg-earth p-6 border border-black/5">
-            <h3 className="text-lg font-semibold text-gray-900">Compromisos</h3>
-            <ul className="mt-3 grid gap-2 text-sm text-gray-800 list-disc pl-5">
-              <li>Vida, educación y participación de las comunidades</li>
-              <li>Diversidad cultural y ancestral</li>
-              <li>Preservación de la naturaleza y conocimiento de los territorios</li>
-              <li>Trabajo social, solidario, concertado, ético, digno y productivo</li>
+          <div className="rounded-2xl bg-white shadow-lg p-8 border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Nuestros pilares de acción</h3>
+            <ul className="grid gap-4">
+              <li className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <strong className="text-gray-900">Protagonismo comunitario:</strong>
+                  <span className="text-gray-700"> Las comunidades lideran su transformación, nosotros acompañamos y fortalecemos sus capacidades.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <strong className="text-gray-900">Sostenibilidad integral:</strong>
+                  <span className="text-gray-700"> Equilibramos lo social, económico y ambiental en cada intervención territorial.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <strong className="text-gray-900">Diálogo de saberes:</strong>
+                  <span className="text-gray-700"> Integramos conocimiento ancestral con innovación tecnológica apropiada.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <strong className="text-gray-900">Impacto medible:</strong>
+                  <span className="text-gray-700"> Generamos cambios concretos y duraderos que mejoran la calidad de vida.</span>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
